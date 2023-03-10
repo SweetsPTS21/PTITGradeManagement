@@ -65,27 +65,27 @@ public class UsersDAO {
     }
 
     public List<Users> listAccount() {
-        List<Users> list = new ArrayList<Users>();
+        List<Users> list = new ArrayList<>();
         Connection con = DBUtility.openConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement("SELECT * from `users`");
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
-                Users account = new Users();
-                account.setId(rs.getString("id"));
-                account.setUsername(rs.getString("username"));
-                account.setPassword(rs.getString("password"));
-                account.setFirstName(rs.getNString("first_name"));
-                account.setLastName(rs.getNString("last_name"));
-                account.setAge(rs.getInt("age"));
-                account.setAddress(rs.getNString("address"));
-                account.setPhoneNumber(rs.getString("phone_number"));
-                account.setNote(rs.getNString("note"));
-                account.setEmail(rs.getString("email"));
-                account.setRole(rs.getNString("role"));
+                Users accountUsers = new Users();
+                accountUsers.setId(rs.getString("id"));
+                accountUsers.setUsername(rs.getString("username"));
+                accountUsers.setPassword(rs.getString("password"));
+                accountUsers.setFirstName(rs.getNString("first_name"));
+                accountUsers.setLastName(rs.getNString("last_name"));
+                accountUsers.setAge(rs.getInt("age"));
+                accountUsers.setAddress(rs.getNString("address"));
+                accountUsers.setPhoneNumber(rs.getString("phone_number"));
+                accountUsers.setNote(rs.getNString("note"));
+                accountUsers.setEmail(rs.getString("email"));
+                accountUsers.setRole(rs.getNString("role"));
                 
-                list.add(account);
+                list.add(accountUsers);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
