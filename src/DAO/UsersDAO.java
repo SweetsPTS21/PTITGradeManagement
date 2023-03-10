@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author TRI
+ * @author boixi
  */
 public class UsersDAO {
 
@@ -118,12 +118,12 @@ public class UsersDAO {
         return false;
     }
 
-    public Boolean Update(String password, String fistName, String lastName, int age, String address, String phoneNumber, String email, String note, String role, String id) {
+    public Boolean Update(String password, String firstName, String lastName, int age, String address, String phoneNumber, String email, String note, String role, String id) {
         Connection con = DBUtility.openConnection();
         try {
-            PreparedStatement pstmt = con.prepareStatement("UPDATE `users` SET `password`=?,`fist_name`=?, `last_name`=?, `age`=?,`address`=?, `phoneNumber`=?, `email`=?, `note`=?, `role`=? WHERE `id`=?");
+            PreparedStatement pstmt = con.prepareStatement("UPDATE `users` SET `password`=?,`first_name`=?, `last_name`=?, `age`=?,`address`=?, `phone_number`=?, `email`=?, `note`=?, `role`=? WHERE `id`=?");
             pstmt.setString(1, password);
-            pstmt.setNString(2, fistName);
+            pstmt.setNString(2, firstName);
             pstmt.setNString(3, lastName);
             pstmt.setInt(4, age);
             pstmt.setNString(5, address);

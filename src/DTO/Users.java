@@ -7,7 +7,7 @@ package DTO;
 
 /**
  *
- * @author TRI
+ * @author boixi
  */
 public class Users {
     private String id;
@@ -126,7 +126,5 @@ public class Users {
     public void setRole(String role) {
         this.role = role;
     }
-
-    
 
 }

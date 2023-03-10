@@ -9,6 +9,7 @@ import DAO.UsersDAO;
 import DTO.Users;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -87,7 +88,7 @@ public class ManageUser extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GiaoDien/Icon/Account_50px.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Account_50px.png"))); // NOI18N
         jLabel1.setText("Quản lý tài khoản");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -104,7 +105,7 @@ public class ManageUser extends javax.swing.JFrame {
 
         txtUsername.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GiaoDien/Icon/Edit File_50px.png"))); // NOI18N
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Edit File_50px.png"))); // NOI18N
         btnUpdate.setText("Cập nhật");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,7 +114,7 @@ public class ManageUser extends javax.swing.JFrame {
         });
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GiaoDien/Icon/Plus_50px.png"))); // NOI18N
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Plus_50px.png"))); // NOI18N
         btnAdd.setText("Thêm mới");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,7 +123,7 @@ public class ManageUser extends javax.swing.JFrame {
         });
 
         btnDelete.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GiaoDien/Icon/Trash_50px.png"))); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Trash_50px.png"))); // NOI18N
         btnDelete.setText("Xóa tài khoản");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,7 +154,7 @@ public class ManageUser extends javax.swing.JFrame {
         txtRePass.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         btnHome.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GiaoDien/Icon/Go Back_50px.png"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Go Back_50px.png"))); // NOI18N
         btnHome.setText("Quay lại");
         btnHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -176,6 +177,7 @@ public class ManageUser extends javax.swing.JFrame {
         cboChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "manager", "teacher", "student", " " }));
 
         txtAge.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtAge.setToolTipText("16-99");
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -320,7 +322,7 @@ public class ManageUser extends javax.swing.JFrame {
                             .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -329,25 +331,14 @@ public class ManageUser extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        if (!idSave.equals("-1")) {
-            
-            if (txtFirstName.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Chưa nhập tên!");
+        if (!idSave.equals("-1")) {           
+            if(!formatValidation()) {
                 return;
             }
-            if (txtPass.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Chưa nhập mật khẩu!");
-                return;
-            }
-            if (txtRePass.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Chưa nhập xác nhận mật khẩu!");
-                return;
-            }
-            if (!txtPass.getText().equals(txtRePass.getText())) {
-                JOptionPane.showMessageDialog(null, "Xác nhận mật khẩu chưa chính xác!");
-                return;
-            }
-            if (UsersDAO.getInstance().Update(txtPass.getText(), txtFirstName.getText(),txtLastName.getText(), Integer.parseInt(txtAge.getText()), txtAddress.getText(), txtPhoneNumber.getText(), txtEmail.getText(), txtNote.getText(), cboChucVu.getSelectedItem().toString(), idSave)) {
+            if (UsersDAO.getInstance().Update(txtPass.getText(), txtFirstName.getText(),txtLastName.getText(), 
+                                Integer.parseInt(txtAge.getText()), txtAddress.getText(), 
+                            txtPhoneNumber.getText(), txtEmail.getText(), txtNote.getText(), 
+                                cboChucVu.getSelectedItem().toString(), idSave)) {
                 JOptionPane.showMessageDialog(null, "Cập nhật thành công!!");
                 LoadTable();
             } else {
@@ -360,28 +351,13 @@ public class ManageUser extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        if (txtFirstName.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Chưa nhập tên!");
+        if(!formatValidation()) {
             return;
         }
-        if (txtUsername.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Chưa nhập tài khoản!");
-            return;
-        }
-        if (txtPass.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Chưa nhập mật khẩu!");
-            return;
-        }
-        if (txtRePass.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Chưa nhập xác nhận mật khẩu!");
-            return;
-        }
-        if (!txtPass.getText().equals(txtRePass.getText())) {
-            JOptionPane.showMessageDialog(null, "Xác nhận mật khẩu chưa chính xác!");
-            return;
-        }
-
-        if (UsersDAO.getInstance().Add(txtUsername.getText(), txtPass.getText(), txtFirstName.getText(),txtLastName.getText(),Integer.parseInt(txtAge.getText()), txtAddress.getText(), txtPhoneNumber.getText(), txtEmail.getText(), txtNote.getText(), cboChucVu.getSelectedItem().toString())) {
+        if (UsersDAO.getInstance().Add(txtUsername.getText(), txtPass.getText(), txtFirstName.getText(),
+                txtLastName.getText(),Integer.parseInt(txtAge.getText()), txtAddress.getText(),
+                txtPhoneNumber.getText(), txtEmail.getText(),
+                txtNote.getText(), cboChucVu.getSelectedItem().toString())) {
             JOptionPane.showMessageDialog(null, "Thêm mới thành công!!");
             LoadTable();
         } else {
@@ -474,11 +450,51 @@ public class ManageUser extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ManageUser().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ManageUser().setVisible(true);
         });
+    }
+    
+    public boolean formatValidation() {
+        if (emptyValidate(txtFirstName) || 
+                emptyValidate(txtLastName) ||emptyValidate(txtUsername)||
+                emptyValidate(txtPass)||emptyValidate(txtRePass) ||
+                emptyValidate(txtAge) || emptyValidate(txtAddress)||
+                emptyValidate(txtPhoneNumber)) {          
+            return false;
+        }
+        if (!txtPass.getText().equals(txtRePass.getText())) {
+            JOptionPane.showMessageDialog(null, "Xác nhận mật khẩu chưa chính xác!");
+            txtRePass.requestFocus();
+            return false;
+        }
+        if(numberValidate(txtAge)|| numberValidate(txtPhoneNumber)){
+            return false;
+        } 
+        if(!txtEmail.getText().contains("@") || !txtEmail.getText().contains(".com")) {
+            JOptionPane.showMessageDialog(null, "Email không đúng định dạng!");
+            txtEmail.requestFocus();
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean numberValidate(JTextField jTextField) {
+        if(!jTextField.getText().matches("[0-9]*")) {
+            JOptionPane.showMessageDialog(null, "Không đúng định dạng!");
+            jTextField.requestFocus();
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean emptyValidate(JTextField jTextField) {
+        if(jTextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Không để trống!");
+            jTextField.requestFocus();
+            return true;
+        }
+        return false;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

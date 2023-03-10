@@ -44,13 +44,12 @@ public class ManagerHome extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/Administrative Tools_50px.png"))); // NOI18N
         jLabel1.setText("Quản Lý Chung");
 
         btnGrade.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnGrade.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/icons8-restaurant-menu-50.png"))); // NOI18N
+        btnGrade.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Statistics_50px.png"))); // NOI18N
         btnGrade.setText("Theo dõi điểm");
         btnGrade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,7 +58,7 @@ public class ManagerHome extends javax.swing.JFrame {
         });
 
         btnUser.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/icons8-table-50.png"))); // NOI18N
+        btnUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-user-50.png"))); // NOI18N
         btnUser.setText("Quản lý user");
         btnUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,7 +67,7 @@ public class ManagerHome extends javax.swing.JFrame {
         });
 
         btnConfig.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/icons8-money-bag-50.png"))); // NOI18N
+        btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Administrative Tools_50px.png"))); // NOI18N
         btnConfig.setText("Cấu hình");
         btnConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,7 +76,7 @@ public class ManagerHome extends javax.swing.JFrame {
         });
 
         btnExportReport.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnExportReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/Buying_50px.png"))); // NOI18N
+        btnExportReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Search_50px.png"))); // NOI18N
         btnExportReport.setText("Xuất báo cáo");
         btnExportReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,7 +146,7 @@ public class ManagerHome extends javax.swing.JFrame {
                             .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 301, Short.MAX_VALUE)
+                        .addGap(52, 296, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnExportReport, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))

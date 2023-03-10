@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author huyparody
+ * @author boixi
  */
 public class DBUtility {
 
