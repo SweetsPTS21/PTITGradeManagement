@@ -8,6 +8,8 @@ package view;
 import DAO.UsersDAO;
 import DTO.Users;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +25,7 @@ public class ManageUser extends javax.swing.JFrame {
      */
     DefaultTableModel tableModel;
     String idSave = "-1";
-
+    
     public ManageUser() {
         initComponents();
         tableModel = new DefaultTableModel();
@@ -331,18 +333,20 @@ public class ManageUser extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        if (!idSave.equals("-1")) {           
-            if(!formatValidation()) {
+        if (!idSave.equals("-1")) {            
+            if (!formatValidation()) {
                 return;
             }
-            if (UsersDAO.getInstance().Update(txtPass.getText(), txtFirstName.getText(),txtLastName.getText(), 
-                                Integer.parseInt(txtAge.getText()), txtAddress.getText(), 
-                            txtPhoneNumber.getText(), txtEmail.getText(), txtNote.getText(), 
-                                cboChucVu.getSelectedItem().toString(), idSave)) {
+            if (UsersDAO.getInstance().Update(txtPass.getText(), txtFirstName.getText(), txtLastName.getText(),
+                    Integer.parseInt(txtAge.getText()), txtAddress.getText(),
+                    txtPhoneNumber.getText(), txtEmail.getText(), txtNote.getText(),
+                    cboChucVu.getSelectedItem().toString(), idSave)) {
                 JOptionPane.showMessageDialog(null, "Cập nhật thành công!!");
                 LoadTable();
+                emptyField();
+                btnAdd.setEnabled(true);
             } else {
-                JOptionPane.showMessageDialog(null, "Lỗi!!");
+                JOptionPane.showMessageDialog(null, "Lỗi!! \nChi tiết lỗi trong file log");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Chọn tài khoản để sửa");
@@ -351,60 +355,58 @@ public class ManageUser extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        if(!formatValidation()) {
+        if(checkDuplicateUser()) {
+            return;
+        }
+        if (!formatValidation()) {
             return;
         }
         if (UsersDAO.getInstance().Add(txtUsername.getText(), txtPass.getText(), txtFirstName.getText(),
-                txtLastName.getText(),Integer.parseInt(txtAge.getText()), txtAddress.getText(),
+                txtLastName.getText(), Integer.parseInt(txtAge.getText()), txtAddress.getText(),
                 txtPhoneNumber.getText(), txtEmail.getText(),
                 txtNote.getText(), cboChucVu.getSelectedItem().toString())) {
             JOptionPane.showMessageDialog(null, "Thêm mới thành công!!");
             LoadTable();
+            emptyField();
         } else {
-            JOptionPane.showMessageDialog(null, "Lỗi!!");
+            JOptionPane.showMessageDialog(null, "Lỗi!! \nChi tiết lỗi trong file log");
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         if (!idSave.equals("-1")) {
-            if (UsersDAO.getInstance().Delete(String.valueOf(idSave))) {
-                LoadTable();
-                idSave = "-1";
-                txtUsername.setText("");
-                txtFirstName.setText("");
-                txtLastName.setText("");
-                txtPass.setText("");
-                txtRePass.setText("");
-                txtAge.setText("");
-                txtPhoneNumber.setText("");
-                txtAddress.setText("");
-                cboChucVu.setSelectedIndex(0);
-                txtNote.setText("");
-                txtEmail.setText("");
-                JOptionPane.showMessageDialog(null, "Xóa tài khoản thành công!!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Xóa tài khoản không thành công!!");
-            }
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa người dùng này?", 
+                    "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(confirm == JOptionPane.YES_OPTION) {
+                if (UsersDAO.getInstance().Delete(String.valueOf(idSave))) {
+                    LoadTable();
+                    emptyField();
+                    JOptionPane.showMessageDialog(null, "Xóa tài khoản thành công!!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Xóa tài khoản không thành công!!");
+                }
+            }           
         } else {
             JOptionPane.showMessageDialog(null, "Chọn tài khoản để xóa!!");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-
+  
         private void tblDisplayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDisplayMouseClicked
             // TODO add your handling code here:
+            //btnAdd.setEnabled(false);
             int row = tblDisplay.getSelectedRow();
             List<Users> list = UsersDAO.getInstance().listAccount();
             idSave = list.get(row).getId();
             
-            txtUsername.setText(tblDisplay.getValueAt(row, 1)+"");
+            txtUsername.setText(tblDisplay.getValueAt(row, 1) + "");
             txtFirstName.setText(tblDisplay.getValueAt(row, 2) + "");
             txtLastName.setText(tblDisplay.getValueAt(row, 3) + "");
             txtAge.setText(tblDisplay.getValueAt(row, 4) + "");
             txtAddress.setText(tblDisplay.getValueAt(row, 5) + "");
             txtPhoneNumber.setText(tblDisplay.getValueAt(row, 6) + "");
             txtEmail.setText(tblDisplay.getValueAt(row, 7) + "");
-            txtNote.setText(tblDisplay.getValueAt(row, 8)+"");
+            txtNote.setText(tblDisplay.getValueAt(row, 8) + "");
             cboChucVu.setSelectedItem(tblDisplay.getValueAt(row, 9) + "");
             txtPass.setText(list.get(row).getPassword());
             txtRePass.setText("");
@@ -456,11 +458,11 @@ public class ManageUser extends javax.swing.JFrame {
     }
     
     public boolean formatValidation() {
-        if (emptyValidate(txtFirstName) || 
-                emptyValidate(txtLastName) ||emptyValidate(txtUsername)||
-                emptyValidate(txtPass)||emptyValidate(txtRePass) ||
-                emptyValidate(txtAge) || emptyValidate(txtAddress)||
-                emptyValidate(txtPhoneNumber)) {          
+        if (emptyValidate(txtFirstName)
+                || emptyValidate(txtLastName) || emptyValidate(txtUsername)
+                || emptyValidate(txtPass) || emptyValidate(txtRePass)
+                || emptyValidate(txtAge) || emptyValidate(txtAddress)
+                || emptyValidate(txtPhoneNumber)) {            
             return false;
         }
         if (!txtPass.getText().equals(txtRePass.getText())) {
@@ -468,11 +470,34 @@ public class ManageUser extends javax.swing.JFrame {
             txtRePass.requestFocus();
             return false;
         }
-        if(numberValidate(txtAge)|| numberValidate(txtPhoneNumber)){
+        //Kiểm tra số điện thoại
+        if (numberValidate(txtPhoneNumber)) {            
             return false;
-        } 
-        if(!txtEmail.getText().contains("@") || !txtEmail.getText().contains(".com")) {
-            JOptionPane.showMessageDialog(null, "Email không đúng định dạng!");
+        } else {
+            String phone = txtPhoneNumber.getText();
+            if (!phone.matches("[0-9]{10}")) {
+                JOptionPane.showMessageDialog(null, "Số điện thoại bao gồm 10 chữ số!");
+                txtAge.requestFocus();
+                return false;
+            }
+        }
+        //Kiểm tra tuổi
+        if (numberValidate(txtAge)) {
+            return false;
+        } else {
+            int age = Integer.parseInt(txtAge.getText());
+            if (age < 18 || age > 100) {
+                JOptionPane.showMessageDialog(null, "Tuổi không hợp lệ!\n Người dùng phải từ 18 tuổi trở lên");
+                txtAge.requestFocus();
+                return false;
+            }
+        }
+        //Sử dụng chuẩn email RFC 5322
+        String emailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(txtEmail.getText() + "");
+        if (!matcher.matches()) {
+            JOptionPane.showMessageDialog(null, "Email không đúng định dạng!\nexample: test@email.com");
             txtEmail.requestFocus();
             return false;
         }
@@ -480,8 +505,8 @@ public class ManageUser extends javax.swing.JFrame {
     }
     
     public boolean numberValidate(JTextField jTextField) {
-        if(!jTextField.getText().matches("[0-9]*")) {
-            JOptionPane.showMessageDialog(null, "Không đúng định dạng!");
+        if (!jTextField.getText().matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(null, "Chỉ được điền số!");
             jTextField.requestFocus();
             return true;
         }
@@ -489,9 +514,39 @@ public class ManageUser extends javax.swing.JFrame {
     }
     
     public boolean emptyValidate(JTextField jTextField) {
-        if(jTextField.getText().isEmpty()) {
+        if (jTextField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Không để trống!");
             jTextField.requestFocus();
+            return true;
+        }
+        return false;
+    }
+    
+    public void emptyField() {
+        idSave = "-1";
+        txtUsername.setText("");
+        txtFirstName.setText("");
+        txtLastName.setText("");        
+        txtPass.setText("");
+        txtRePass.setText("");
+        txtAge.setText("");
+        txtPhoneNumber.setText("");
+        txtAddress.setText("");
+        cboChucVu.setSelectedIndex(0);
+        txtNote.setText("");
+        txtEmail.setText("");
+    }
+    
+    public boolean checkDuplicateUser() {
+        int row = tblDisplay.getSelectedRow();
+        if(txtPhoneNumber.getText().equals(tblDisplay.getValueAt(row, 6).toString())) {
+            JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
+            txtPhoneNumber.requestFocus();
+            return true;
+        }
+        if(txtEmail.getText().equals(tblDisplay.getValueAt(row, 7).toString())) {
+            JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
+            txtEmail.requestFocus();
             return true;
         }
         return false;
@@ -534,9 +589,9 @@ public class ManageUser extends javax.swing.JFrame {
         List<Users> list = UsersDAO.getInstance().listAccount();
         for (int i = 0; i < list.size(); i++) {
             Users account = list.get(i);
-            Object[] dt = {account.getId(), account.getUsername(),account.getFirstName(),account.getLastName() ,account.getAge(), account.getAddress(), account.getPhoneNumber(), account.getEmail(), account.getNote(), account.getRole()};
+            Object[] dt = {account.getId(), account.getUsername(), account.getFirstName(), account.getLastName(), account.getAge(), account.getAddress(), account.getPhoneNumber(), account.getEmail(), account.getNote(), account.getRole()};
             tableModel.addRow(dt);
         }
-
+        
     }
 }
