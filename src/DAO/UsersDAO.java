@@ -6,6 +6,8 @@
 package DAO;
 
 import DTO.Users;
+import AES.AES;
+import Utilities.Tags;
 import Utilities.DBUtility;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +23,8 @@ import java.util.logging.Logger;
  * @author boixi
  */
 public class UsersDAO {
-
+    
+    private static final String KEYCHAIN = Tags.getKEYCHAIN();
     private static UsersDAO instance;
     Users account = new Users();
 
@@ -44,7 +47,9 @@ public class UsersDAO {
         try {
             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM `users` WHERE username = ? AND password = ?");
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
+            
+            String encryptPass = AES.encrypt(password, KEYCHAIN);
+            pstmt.setString(2, encryptPass);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 account.setId(rs.getString("id"));
@@ -75,7 +80,8 @@ public class UsersDAO {
                 Users accountUsers = new Users();
                 accountUsers.setId(rs.getString("id"));
                 accountUsers.setUsername(rs.getString("username"));
-                accountUsers.setPassword(rs.getString("password"));
+                String decryptPass = AES.decrypt(rs.getString("password"), KEYCHAIN);
+                accountUsers.setPassword(decryptPass);
                 accountUsers.setFirstName(rs.getNString("first_name"));
                 accountUsers.setLastName(rs.getNString("last_name"));
                 accountUsers.setAge(rs.getInt("age"));
@@ -98,7 +104,8 @@ public class UsersDAO {
         try {
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO `users`(`username`, `password`, `first_name`, `last_name`, `age`, `address`, `phone_number`, `email`, `note`, `role`) VALUES (?,?,?,?,?,?,?,?,?,?)");
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
+            String encryptPass = AES.encrypt(password, KEYCHAIN);
+            pstmt.setString(2, encryptPass);
             pstmt.setNString(3, fistName);
             pstmt.setNString(4, lastName);
             pstmt.setInt(5, age);
@@ -122,7 +129,8 @@ public class UsersDAO {
         Connection con = DBUtility.openConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement("UPDATE `users` SET `password`=?,`first_name`=?, `last_name`=?, `age`=?,`address`=?, `phone_number`=?, `email`=?, `note`=?, `role`=? WHERE `id`=?");
-            pstmt.setString(1, password);
+            String encryptPass = AES.encrypt(password, KEYCHAIN);
+            pstmt.setString(1, encryptPass);
             pstmt.setNString(2, firstName);
             pstmt.setNString(3, lastName);
             pstmt.setInt(4, age);
@@ -162,7 +170,8 @@ public class UsersDAO {
         Connection con = DBUtility.openConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement("UPDATE `users` SET `password`=? WHERE `id`=?");
-            pstmt.setString(1, pass);
+            String encryptPass = AES.encrypt(pass, KEYCHAIN);
+            pstmt.setString(1, encryptPass);
             pstmt.setString(2, id);
             int i = pstmt.executeUpdate();
             if (i > 0) {

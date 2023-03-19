@@ -6,6 +6,8 @@
 package view;
 
 import DAO.UsersDAO;
+import AES.AES;
+import Utilities.Tags;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author boixi
  */
 public class ChangePassword extends javax.swing.JFrame {
-
+    private static String KEYCHAIN = Tags.getKEYCHAIN();
     /**
      * Creates new form DoiMatKhau
      */
@@ -151,7 +153,7 @@ public class ChangePassword extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Chưa nhập xác nhận mật khẩu!");
             return;
         }
-        if (!txtPassOld.getText().equals(UsersDAO.getInstance().GetAccount().getPassword())) {
+        if (!txtPassOld.getText().equals(AES.decrypt(UsersDAO.getInstance().GetAccount().getPassword(), KEYCHAIN))) {
             JOptionPane.showMessageDialog(null, "Mật khẩu cũ chưa chính xác!");
             return;
         }

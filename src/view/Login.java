@@ -42,7 +42,7 @@ public class Login extends javax.swing.JFrame {
         txtmessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Đăng nhập");
+        setTitle("Hệ thống quản lý điểm PTIT");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N

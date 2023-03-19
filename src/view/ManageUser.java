@@ -25,6 +25,7 @@ public class ManageUser extends javax.swing.JFrame {
      */
     DefaultTableModel tableModel;
     String idSave = "-1";
+    private List<Users> listUser = UsersDAO.getInstance().listAccount();
     
     public ManageUser() {
         initComponents();
@@ -355,10 +356,10 @@ public class ManageUser extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        if(checkDuplicateUser()) {
+        if (!formatValidation()) {
             return;
         }
-        if (!formatValidation()) {
+        if(checkDuplicateUser()) {
             return;
         }
         if (UsersDAO.getInstance().Add(txtUsername.getText(), txtPass.getText(), txtFirstName.getText(),
@@ -395,9 +396,8 @@ public class ManageUser extends javax.swing.JFrame {
         private void tblDisplayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDisplayMouseClicked
             // TODO add your handling code here:
             //btnAdd.setEnabled(false);
-            int row = tblDisplay.getSelectedRow();
-            List<Users> list = UsersDAO.getInstance().listAccount();
-            idSave = list.get(row).getId();
+            int row = tblDisplay.getSelectedRow();          
+            idSave = listUser.get(row).getId();
             
             txtUsername.setText(tblDisplay.getValueAt(row, 1) + "");
             txtFirstName.setText(tblDisplay.getValueAt(row, 2) + "");
@@ -408,7 +408,7 @@ public class ManageUser extends javax.swing.JFrame {
             txtEmail.setText(tblDisplay.getValueAt(row, 7) + "");
             txtNote.setText(tblDisplay.getValueAt(row, 8) + "");
             cboChucVu.setSelectedItem(tblDisplay.getValueAt(row, 9) + "");
-            txtPass.setText(list.get(row).getPassword());
+            txtPass.setText(listUser.get(row).getPassword());
             txtRePass.setText("");
         }//GEN-LAST:event_tblDisplayMouseClicked
 
@@ -462,7 +462,7 @@ public class ManageUser extends javax.swing.JFrame {
                 || emptyValidate(txtLastName) || emptyValidate(txtUsername)
                 || emptyValidate(txtPass) || emptyValidate(txtRePass)
                 || emptyValidate(txtAge) || emptyValidate(txtAddress)
-                || emptyValidate(txtPhoneNumber)) {            
+                || emptyValidate(txtPhoneNumber)) {          
             return false;
         }
         if (!txtPass.getText().equals(txtRePass.getText())) {
@@ -538,17 +538,18 @@ public class ManageUser extends javax.swing.JFrame {
     }
     
     public boolean checkDuplicateUser() {
-        int row = tblDisplay.getSelectedRow();
-        if(txtPhoneNumber.getText().equals(tblDisplay.getValueAt(row, 6).toString())) {
-            JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
-            txtPhoneNumber.requestFocus();
-            return true;
-        }
-        if(txtEmail.getText().equals(tblDisplay.getValueAt(row, 7).toString())) {
-            JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
-            txtEmail.requestFocus();
-            return true;
-        }
+        for(Users user : listUser) {
+            if(txtPhoneNumber.getText().equals(user.getPhoneNumber())) {
+                JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
+                txtPhoneNumber.requestFocus();
+                return true;
+            }
+            if(txtEmail.getText().equals(user.getEmail())) {
+                JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
+                txtEmail.requestFocus();
+                return true;
+            }
+        }  
         return false;
     }
 
