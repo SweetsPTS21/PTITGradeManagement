@@ -38,6 +38,16 @@ public class Users {
         this.note = note;
         this.role = role;
     }
+    
+    public Users(String firstName, String lastName, int age, String address, String phoneNumber, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+
+    }
 
     public String getId() {
         return id;

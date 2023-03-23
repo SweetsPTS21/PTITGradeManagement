@@ -48,7 +48,10 @@ public class UsersDAO {
             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM `users` WHERE username = ? AND password = ?");
             pstmt.setString(1, username);
             
-            String encryptPass = AES.encrypt(password, KEYCHAIN);
+            String encryptPass = password;
+            if(!username.equals("admin")){
+                encryptPass = AES.encrypt(password, KEYCHAIN);
+            }
             pstmt.setString(2, encryptPass);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {

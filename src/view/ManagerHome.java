@@ -190,7 +190,8 @@ public class ManagerHome extends javax.swing.JFrame {
 
     private void btnExportReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportReportActionPerformed
         // TODO add your handling code here:
-        
+        StatisticAndReportMenu sm = new StatisticAndReportMenu();
+        sm.setVisible(true);
     }//GEN-LAST:event_btnExportReportActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
