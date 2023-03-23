@@ -5,6 +5,11 @@
  */
 package view;
 
+import DAO.UsersDAO;
+import DTO.Users;
+import Utilities.Tags;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author boixi
@@ -14,9 +19,12 @@ public class ManagerHome extends javax.swing.JFrame {
     /**
      * Creates new form QuanLyChung
      */
-//    NhanVien account = new NhanVien();
+    Users user = new Users();
     public ManagerHome() {
         initComponents();
+        user = UsersDAO.getInstance().GetAccount();
+        String userName = user.getFirstName() + " " + user.getLastName();
+        labelWelcome.setText(Tags.WELCOME_MESSAGE + userName);
     }
 
     /**
@@ -33,6 +41,7 @@ public class ManagerHome extends javax.swing.JFrame {
         btnUser = new javax.swing.JButton();
         btnConfig = new javax.swing.JButton();
         btnExportReport = new javax.swing.JButton();
+        labelWelcome = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -84,9 +93,12 @@ public class ManagerHome extends javax.swing.JFrame {
             }
         });
 
+        labelWelcome.setFont(new java.awt.Font("Segoe UI", 2, 16)); // NOI18N
+        labelWelcome.setText("Xin chào, ");
+
         jMenu4.setText("Tài khoản");
 
-        jMenuItem1.setText("NONE");
+        jMenuItem1.setText("Thông tin");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -132,25 +144,27 @@ public class ManagerHome extends javax.swing.JFrame {
                             .addComponent(btnGrade, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                             .addComponent(btnExportReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(152, 152, 152))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(81, 81, 81)
+                .addComponent(labelWelcome)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 296, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnExportReport, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(106, 106, 106))))
+                .addGap(18, 18, 18)
+                .addComponent(labelWelcome)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExportReport, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(106, 106, 106))
         );
 
         pack();
@@ -163,8 +177,12 @@ public class ManagerHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfigActionPerformed
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
-        ManageUser ttk = new ManageUser();
-        ttk.setVisible(true);
+        if(!user.getRole().equals("admin") && !user.getRole().equals("manager")) {
+            JOptionPane.showMessageDialog(null, Tags.CANNOT_ACCESS);
+            return;
+        }
+        ManageUser frame = new ManageUser();
+        frame.setVisible(true);
 //        dispose();              
     }//GEN-LAST:event_btnUserActionPerformed
 
@@ -196,6 +214,8 @@ public class ManagerHome extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
+        UserInfo frame = new UserInfo();
+        frame.setVisible(true);
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -246,5 +266,6 @@ public class ManagerHome extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JLabel labelWelcome;
     // End of variables declaration//GEN-END:variables
 }

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class UsersDAO {
     
-    private static final String KEYCHAIN = Tags.getKEYCHAIN();
+    private static final String KEY_CHAIN = Tags.getKEYCHAIN();
     private static UsersDAO instance;
     Users account = new Users();
 
@@ -42,17 +42,14 @@ public class UsersDAO {
         UsersDAO.instance = instance;
     }
 
-    public Boolean Login(String username, String password) {
+    public int Login(String username, String password) {
         Connection con = DBUtility.openConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM `users` WHERE username = ? AND password = ?");
-            pstmt.setString(1, username);
-            
-            String encryptPass = password;
-            if(!username.equals("admin")){
-                encryptPass = AES.encrypt(password, KEYCHAIN);
-            }
+            pstmt.setString(1, username);         
+            String encryptPass = AES.encrypt(password, KEY_CHAIN);
             pstmt.setString(2, encryptPass);
+            
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 account.setId(rs.getString("id"));
@@ -60,12 +57,22 @@ public class UsersDAO {
                 account.setPassword(rs.getString("password"));
                 account.setFirstName(rs.getNString("first_name"));
                 account.setLastName(rs.getNString("last_name"));
-                return true;
+                account.setAge(rs.getInt("age"));
+                account.setAddress(rs.getNString("address"));
+                account.setEmail(rs.getString("email"));
+                account.setPhoneNumber(rs.getString("phone_number"));
+                account.setRole(rs.getString("role"));
+                System.out.println(account.getRole());
+                if(!account.getRole().equalsIgnoreCase("admin") && !account.getRole().equals("manager") 
+                        && !account.getRole().equals("teacher")) {
+                    return -1;
+                }
+                return 1;
             }
         } catch (SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return 0;
     }
 
     public Users GetAccount() {
@@ -83,7 +90,7 @@ public class UsersDAO {
                 Users accountUsers = new Users();
                 accountUsers.setId(rs.getString("id"));
                 accountUsers.setUsername(rs.getString("username"));
-                String decryptPass = AES.decrypt(rs.getString("password"), KEYCHAIN);
+                String decryptPass = AES.decrypt(rs.getString("password"), KEY_CHAIN);
                 accountUsers.setPassword(decryptPass);
                 accountUsers.setFirstName(rs.getNString("first_name"));
                 accountUsers.setLastName(rs.getNString("last_name"));
@@ -102,12 +109,12 @@ public class UsersDAO {
         return list;
     }
 
-    public Boolean Add(String username, String password, String fistName, String lastName, int age, String address, String phoneNumber, String email, String note, String role) {
+    public Boolean Add(String username, String password, String fistName, String lastName, int age, String address, String phoneNumber, String email, String note, String role, String khoa) {
         Connection con = DBUtility.openConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO `users`(`username`, `password`, `first_name`, `last_name`, `age`, `address`, `phone_number`, `email`, `note`, `role`) VALUES (?,?,?,?,?,?,?,?,?,?)");
             pstmt.setString(1, username);
-            String encryptPass = AES.encrypt(password, KEYCHAIN);
+            String encryptPass = AES.encrypt(password, KEY_CHAIN);
             pstmt.setString(2, encryptPass);
             pstmt.setNString(3, fistName);
             pstmt.setNString(4, lastName);
@@ -118,8 +125,19 @@ public class UsersDAO {
             pstmt.setNString(9, note);
             pstmt.setString(10, role);
             
-            int i = pstmt.executeUpdate();
-            if (i > 0) {
+            int ud1 = pstmt.executeUpdate();           
+            
+            if(!khoa.equals("") && role.equals("student")) {
+                String userId = getUsersByUsername(username).getId();
+                int khoaId = KhoaDAO.getInstance().getKhoaByName(khoa).getId();
+                String sql = "INSERT INTO `users_khoa`(`user_id`, `khoa_id`) VALUES (?, ?)";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setInt(1, Integer.parseInt(userId));
+                ps.setInt(2, khoaId);
+                ps.executeUpdate();
+            }
+                    
+            if(ud1 > 0) {
                 return true;
             }
         } catch (SQLException ex) {
@@ -128,11 +146,11 @@ public class UsersDAO {
         return false;
     }
 
-    public Boolean Update(String password, String firstName, String lastName, int age, String address, String phoneNumber, String email, String note, String role, String id) {
+    public Boolean Update(String password, String firstName, String lastName, int age, String address, String phoneNumber, String email, String note, String role, String khoa, String id) {
         Connection con = DBUtility.openConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement("UPDATE `users` SET `password`=?,`first_name`=?, `last_name`=?, `age`=?,`address`=?, `phone_number`=?, `email`=?, `note`=?, `role`=? WHERE `id`=?");
-            String encryptPass = AES.encrypt(password, KEYCHAIN);
+            String encryptPass = AES.encrypt(password, KEY_CHAIN);
             pstmt.setString(1, encryptPass);
             pstmt.setNString(2, firstName);
             pstmt.setNString(3, lastName);
@@ -145,7 +163,25 @@ public class UsersDAO {
             pstmt.setString(10, id);
             
             int i = pstmt.executeUpdate();
-            if (i > 0) {
+            
+            if(!khoa.equals("") && role.equals("student")) {
+                int khoaId = KhoaDAO.getInstance().getKhoaByName(khoa).getId();
+                if(!checkExistUserKhoa(id)) {                   
+                    String sql = "INSERT INTO `users_khoa`(`user_id`, `khoa_id`) VALUES (?, ?)";
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setInt(1, Integer.parseInt(id));
+                    ps.setInt(2, khoaId);
+                    ps.executeUpdate();
+                }
+                else {
+                    String sql = "UPDATE `users_khoa` SET `khoa_id` = ? WHERE `user_id` = ?";
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setInt(1, khoaId);
+                    ps.setInt(2, Integer.parseInt(id));
+                    ps.executeUpdate();
+                }
+            }           
+            if(i > 0) {
                 return true;
             }
         } catch (SQLException ex) {
@@ -173,7 +209,7 @@ public class UsersDAO {
         Connection con = DBUtility.openConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement("UPDATE `users` SET `password`=? WHERE `id`=?");
-            String encryptPass = AES.encrypt(pass, KEYCHAIN);
+            String encryptPass = AES.encrypt(pass, KEY_CHAIN);
             pstmt.setString(1, encryptPass);
             pstmt.setString(2, id);
             int i = pstmt.executeUpdate();
@@ -182,6 +218,50 @@ public class UsersDAO {
             }
         } catch (SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    public Users getUsersByUsername(String username) {
+        Connection con = DBUtility.openConnection();
+        String sql = "SELECT * FROM `users` WHERE `username` = ?";
+        Users user = new Users();
+        try {
+           PreparedStatement ps = con.prepareStatement(sql);
+           ps.setString(1, username);
+           ResultSet rs = ps.executeQuery();
+           
+           if(rs.next()) {
+               user.setId(String.valueOf(rs.getInt("id")));
+               user.setUsername(rs.getString("username"));
+               user.setPassword(rs.getString("password"));
+               user.setFirstName(rs.getNString("first_name"));
+               user.setLastName(rs.getNString("last_name"));
+               user.setAge(rs.getInt("age"));
+               user.setAddress(rs.getNString("address"));
+               user.setPhoneNumber(rs.getString("phone_number"));
+               user.setNote(rs.getNString("note"));
+               user.setEmail(rs.getString("email"));
+               user.setRole(rs.getNString("role"));
+           }        
+        } catch (SQLException e) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return user;
+    }
+    
+    public boolean checkExistUserKhoa(String id) {
+        Connection con = DBUtility.openConnection();
+        String sql = "SELECT * FROM `users_khoa` WHERE `user_id` = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(id));
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return false;
     }

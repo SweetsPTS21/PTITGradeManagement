@@ -5,8 +5,11 @@
  */
 package view;
 
+import DAO.KhoaDAO;
 import DAO.UsersDAO;
+import DTO.Khoa;
 import DTO.Users;
+import Utilities.Tags;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +46,8 @@ public class ManageUser extends javax.swing.JFrame {
         
         tblDisplay.setModel(tableModel);
         LoadTable();
+        cboKhoa.setEnabled(false);
+        labelKhoa.setEnabled(false);
     }
 
     /**
@@ -71,7 +76,7 @@ public class ManageUser extends javax.swing.JFrame {
         btnHome = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        labelRole = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         cboChucVu = new javax.swing.JComboBox<>();
         txtAge = new javax.swing.JTextField();
@@ -83,6 +88,8 @@ public class ManageUser extends javax.swing.JFrame {
         txtLastName = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtNote = new javax.swing.JTextField();
+        labelKhoa = new javax.swing.JLabel();
+        cboKhoa = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thêm tài khoản");
@@ -171,13 +178,18 @@ public class ManageUser extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Số điện thoại:");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Chức vụ: ");
+        labelRole.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        labelRole.setText("Chức vụ: ");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Địa chỉ: ");
 
-        cboChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "manager", "teacher", "student", " " }));
+        cboChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Select role--", "manager", "teacher", "student", " " }));
+        cboChucVu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboChucVuActionPerformed(evt);
+            }
+        });
 
         txtAge.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtAge.setToolTipText("16-99");
@@ -206,6 +218,11 @@ public class ManageUser extends javax.swing.JFrame {
 
         txtNote.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        labelKhoa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        labelKhoa.setText("Khoa: ");
+
+        cboKhoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Select khoa--", "CNTT", "ATTT", "QTKD", "DTVT" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -231,21 +248,22 @@ public class ManageUser extends javax.swing.JFrame {
                                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(txtRePass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                        .addComponent(txtPass, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtFirstName, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(104, 104, 104)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(txtRePass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                            .addComponent(txtPass, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtFirstName, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(104, 104, 104)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(labelRole, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(24, 24, 24)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,7 +272,9 @@ public class ManageUser extends javax.swing.JFrame {
                                                 .addComponent(txtNote, javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(cboChucVu, javax.swing.GroupLayout.Alignment.LEADING, 0, 202, Short.MAX_VALUE)
-                                                .addComponent(txtPhoneNumber))))))
+                                                .addComponent(txtPhoneNumber)
+                                                .addComponent(cboKhoa, 0, 202, Short.MAX_VALUE))))
+                                    .addComponent(labelKhoa, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(126, 126, 126)
@@ -314,12 +334,14 @@ public class ManageUser extends javax.swing.JFrame {
                                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel8)
+                                    .addComponent(labelRole)
                                     .addComponent(cboChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(labelKhoa)
+                            .addComponent(cboKhoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(67, 67, 67)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -341,16 +363,16 @@ public class ManageUser extends javax.swing.JFrame {
             if (UsersDAO.getInstance().Update(txtPass.getText(), txtFirstName.getText(), txtLastName.getText(),
                     Integer.parseInt(txtAge.getText()), txtAddress.getText(),
                     txtPhoneNumber.getText(), txtEmail.getText(), txtNote.getText(),
-                    cboChucVu.getSelectedItem().toString(), idSave)) {
-                JOptionPane.showMessageDialog(null, "Cập nhật thành công!!");
+                    cboChucVu.getSelectedItem().toString(), cboKhoa.getSelectedItem().toString(),idSave)) {
+                JOptionPane.showMessageDialog(null, Tags.UPDATE_SUCCESS);
                 LoadTable();
                 emptyField();
                 btnAdd.setEnabled(true);
             } else {
-                JOptionPane.showMessageDialog(null, "Lỗi!! \nChi tiết lỗi trong file log");
+                JOptionPane.showMessageDialog(null, Tags.UNEXPECTED_ERROR);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Chọn tài khoản để sửa");
+            JOptionPane.showMessageDialog(null, Tags.NONE_SELECTED);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -365,40 +387,45 @@ public class ManageUser extends javax.swing.JFrame {
         if (UsersDAO.getInstance().Add(txtUsername.getText(), txtPass.getText(), txtFirstName.getText(),
                 txtLastName.getText(), Integer.parseInt(txtAge.getText()), txtAddress.getText(),
                 txtPhoneNumber.getText(), txtEmail.getText(),
-                txtNote.getText(), cboChucVu.getSelectedItem().toString())) {
-            JOptionPane.showMessageDialog(null, "Thêm mới thành công!!");
+                txtNote.getText(), cboChucVu.getSelectedItem().toString(), cboKhoa.getSelectedItem().toString())) {
+            JOptionPane.showMessageDialog(null, Tags.ADD_USER_SUCCESS);
             LoadTable();
             emptyField();
         } else {
-            JOptionPane.showMessageDialog(null, "Lỗi!! \nChi tiết lỗi trong file log");
+            JOptionPane.showMessageDialog(null, Tags.UNEXPECTED_ERROR);
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         if (!idSave.equals("-1")) {
-            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa người dùng này?", 
+            int confirm = JOptionPane.showConfirmDialog(this, Tags.DELETE_CONFIRM, 
                     "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(confirm == JOptionPane.YES_OPTION) {
                 if (UsersDAO.getInstance().Delete(String.valueOf(idSave))) {
                     LoadTable();
                     emptyField();
-                    JOptionPane.showMessageDialog(null, "Xóa tài khoản thành công!!");
+                    JOptionPane.showMessageDialog(null, Tags.DELETE_USER_SUCCESS);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Xóa tài khoản không thành công!!");
+                    JOptionPane.showMessageDialog(null, Tags.DELETE_USER_FAILURE);
                 }
             }           
         } else {
-            JOptionPane.showMessageDialog(null, "Chọn tài khoản để xóa!!");
+            JOptionPane.showMessageDialog(null, Tags.NONE_SELECTED);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
   
         private void tblDisplayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDisplayMouseClicked
             // TODO add your handling code here:
             //btnAdd.setEnabled(false);
-            int row = tblDisplay.getSelectedRow();          
+            int row = tblDisplay.getSelectedRow();             
             idSave = listUser.get(row).getId();
             
+            if(!UsersDAO.getInstance().GetAccount().getRole().equals("admin")) {
+                availbleForAdmin();
+            }          
+                       
+            Khoa khoa = KhoaDAO.getInstance().getKhoaByUserId(Integer.parseInt(idSave));
             txtUsername.setText(tblDisplay.getValueAt(row, 1) + "");
             txtFirstName.setText(tblDisplay.getValueAt(row, 2) + "");
             txtLastName.setText(tblDisplay.getValueAt(row, 3) + "");
@@ -407,9 +434,21 @@ public class ManageUser extends javax.swing.JFrame {
             txtPhoneNumber.setText(tblDisplay.getValueAt(row, 6) + "");
             txtEmail.setText(tblDisplay.getValueAt(row, 7) + "");
             txtNote.setText(tblDisplay.getValueAt(row, 8) + "");
-            cboChucVu.setSelectedItem(tblDisplay.getValueAt(row, 9) + "");
+            cboChucVu.setSelectedItem(tblDisplay.getValueAt(row, 9) + "");           
             txtPass.setText(listUser.get(row).getPassword());
             txtRePass.setText("");
+            
+            System.out.println(khoa.getTen());
+            if(tblDisplay.getValueAt(row, 9).toString().equalsIgnoreCase("student")) {
+                cboKhoa.setEnabled(true);
+                labelKhoa.setEnabled(true);
+                cboKhoa.setSelectedItem(khoa.getTen() + "");
+            }
+            else {
+                cboKhoa.setEnabled(false);
+                labelKhoa.setEnabled(false);
+                cboKhoa.setSelectedIndex(0);
+            }
         }//GEN-LAST:event_tblDisplayMouseClicked
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
@@ -420,6 +459,18 @@ public class ManageUser extends javax.swing.JFrame {
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailActionPerformed
+
+    private void cboChucVuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChucVuActionPerformed
+        // TODO add your handling code here:
+        if(cboChucVu.getSelectedItem().toString().equalsIgnoreCase("student")) {
+            cboKhoa.setEnabled(true);
+            labelKhoa.setEnabled(true);
+        }
+        else {
+            cboKhoa.setEnabled(false);
+            labelKhoa.setEnabled(false);
+        }
+    }//GEN-LAST:event_cboChucVuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -533,6 +584,7 @@ public class ManageUser extends javax.swing.JFrame {
         txtPhoneNumber.setText("");
         txtAddress.setText("");
         cboChucVu.setSelectedIndex(0);
+        cboKhoa.setSelectedIndex(0);
         txtNote.setText("");
         txtEmail.setText("");
     }
@@ -540,18 +592,47 @@ public class ManageUser extends javax.swing.JFrame {
     public boolean checkDuplicateUser() {
         for(Users user : listUser) {
             if(txtPhoneNumber.getText().equals(user.getPhoneNumber())) {
-                JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
+                JOptionPane.showMessageDialog(null, Tags.USER_EXISTED);
                 txtPhoneNumber.requestFocus();
                 return true;
             }
             if(txtEmail.getText().equals(user.getEmail())) {
-                JOptionPane.showMessageDialog(null, "Người dùng đã tồn tại!!!\nKiểm tra thông tin nhập vào");
+                JOptionPane.showMessageDialog(null, Tags.USER_EXISTED);
                 txtEmail.requestFocus();
                 return true;
             }
         }  
         return false;
     }
+    
+    public void availbleForAdmin() {
+        if(idSave.equals("1")) {
+            btnAdd.setEnabled(false);
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            cboChucVu.setSelectedIndex(0);
+            cboChucVu.setEnabled(false);
+            labelRole.setEnabled(false);
+            return;
+        }
+        btnAdd.setEnabled(true);
+        btnUpdate.setEnabled(true);
+        btnDelete.setEnabled(true);
+        cboChucVu.setEnabled(true);
+        labelRole.setEnabled(true);
+    }
+    
+    private void LoadTable() {
+        tableModel.setRowCount(0);
+        listUser = UsersDAO.getInstance().listAccount();
+        for (int i = 0; i < listUser.size(); i++) {
+            Users account = listUser.get(i);
+            Object[] dt = {account.getId(), account.getUsername(), account.getFirstName(), account.getLastName(), account.getAge(), account.getAddress(), account.getPhoneNumber(), account.getEmail(), account.getNote(), account.getRole()};
+            tableModel.addRow(dt);
+        }
+        
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -559,6 +640,7 @@ public class ManageUser extends javax.swing.JFrame {
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cboChucVu;
+    private javax.swing.JComboBox<String> cboKhoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -569,9 +651,10 @@ public class ManageUser extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelKhoa;
+    private javax.swing.JLabel labelRole;
     private javax.swing.JTable tblDisplay;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtAge;
@@ -585,14 +668,4 @@ public class ManageUser extends javax.swing.JFrame {
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    private void LoadTable() {
-        tableModel.setRowCount(0);
-        List<Users> list = UsersDAO.getInstance().listAccount();
-        for (int i = 0; i < list.size(); i++) {
-            Users account = list.get(i);
-            Object[] dt = {account.getId(), account.getUsername(), account.getFirstName(), account.getLastName(), account.getAge(), account.getAddress(), account.getPhoneNumber(), account.getEmail(), account.getNote(), account.getRole()};
-            tableModel.addRow(dt);
-        }
-        
-    }
 }

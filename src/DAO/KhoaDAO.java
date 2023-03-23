@@ -56,4 +56,42 @@ public class KhoaDAO {
         }
         return list;
     }
+    
+    public Khoa getKhoaByUserId(int userId) {
+        Connection con = DBUtility.openConnection();
+        Khoa khoa = new Khoa();
+        try {
+            String sql = "select khoa.id, khoa.ten from khoa join users_khoa where khoa.id = users_khoa.khoa_id and users_khoa.user_id = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+                      
+            while (rs.next()) {               
+                khoa.setId(rs.getInt("id"));
+                khoa.setTen(rs.getString("ten"));              
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return khoa;
+    }
+    
+    public Khoa getKhoaByName(String name) {
+        Connection con = DBUtility.openConnection();
+        Khoa khoa = new Khoa();
+        try {
+            String sql = "SELECT * FROM `khoa` WHERE `ten` = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+                      
+            while (rs.next()) {               
+                khoa.setId(rs.getInt("id"));
+                khoa.setTen(rs.getString("ten"));              
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return khoa;
+    }
 }

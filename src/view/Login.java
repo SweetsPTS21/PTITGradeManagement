@@ -6,7 +6,10 @@
 package view;
 
 import DAO.UsersDAO;
+import Utilities.Tags;
 import java.awt.event.KeyEvent;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -146,20 +149,30 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsernameActionPerformed
     private void AuthenticateAndLogin() {
         if (txtUsername.getText().isEmpty()) {
-            txtmessage.setText("Bạn chưa nhập tên tài khoản!");
+            txtmessage.setText(Tags.NOT_EMPTY);
             return;
         }
         if (txtPassword.getText().isEmpty()) {
-            txtmessage.setText("Bạn chưa nhập mật khẩu!");
+            txtmessage.setText(Tags.NOT_EMPTY);
             return;
         }
         if(validation(txtUsername.getText())) {
-            if (!UsersDAO.getInstance().Login(txtUsername.getText(), txtPassword.getText())) {
-                txtmessage.setText("Sai tên đăng nhập hoặc mật khẩu!!");
+            int status = UsersDAO.getInstance().Login(txtUsername.getText(), txtPassword.getText());
+            if (status == 0) {
+                txtmessage.setText(Tags.LOGIN_FAIL);
                 return;
             }
+            if (status == -1) {
+                JOptionPane.showMessageDialog(null, Tags.DENY_LOGIN);
+                return;
+            }         
             ManagerHome qlc = new ManagerHome();
             qlc.setVisible(true);
+            Date date = new Date();
+            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+            
+            String loginTime = formater.format(date);
+            Tags.setLOGIN_TIME(loginTime);
             dispose();
         }
     }
@@ -232,11 +245,11 @@ public class Login extends javax.swing.JFrame {
             return true;
         }
         if(username.length() < 6 || username.length() > 30) {
-            JOptionPane.showMessageDialog(null, "Tên đăng nhập phải có độ dài từ 6-30 ký tự");
+            JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_USERNAME_1);
             return false;
         }
         if(!matcher.matches()) {
-            JOptionPane.showMessageDialog(null, "Tên đăng nhập không được chứa ký tự đặc biệt");
+            JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_USERNAME_2);
             return false;
         }
         return true;

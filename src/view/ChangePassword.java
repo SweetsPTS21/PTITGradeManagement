@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author boixi
  */
 public class ChangePassword extends javax.swing.JFrame {
-    private static String KEYCHAIN = Tags.getKEYCHAIN();
+    private static String KEY_CHAIN = Tags.getKEYCHAIN();
     /**
      * Creates new form DoiMatKhau
      */
@@ -140,31 +140,31 @@ public class ChangePassword extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if (txtPassOld.getText().isEmpty() || txtPassNew.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Không được để trống!");
+            JOptionPane.showMessageDialog(null, Tags.NOT_EMPTY);
             txtPassOld.requestFocus();
             return;
         }
         if (txtPassNew.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Không được để trống!");
+            JOptionPane.showMessageDialog(null, Tags.NOT_EMPTY);
             txtPassNew.requestFocus();
             return;
         }
         if (txtRePass.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Chưa nhập xác nhận mật khẩu!");
+            JOptionPane.showMessageDialog(null, Tags.NOT_EMPTY);
             return;
         }
-        if (!txtPassOld.getText().equals(AES.decrypt(UsersDAO.getInstance().GetAccount().getPassword(), KEYCHAIN))) {
-            JOptionPane.showMessageDialog(null, "Mật khẩu cũ chưa chính xác!");
+        if (!txtPassOld.getText().equals(AES.decrypt(UsersDAO.getInstance().GetAccount().getPassword(), KEY_CHAIN))) {
+            JOptionPane.showMessageDialog(null, Tags.OLD_PASSWORD_INCORRECT);
             return;
         }
         if (!txtPassNew.getText().equals(txtRePass.getText())) {
-            JOptionPane.showMessageDialog(null, "Xác nhận mật khẩu mới chưa chính xác!");
+            JOptionPane.showMessageDialog(null, Tags.CONFIRM_PASSWORD_INCORRECT);
             return;
         }
         if (UsersDAO.getInstance().DoiMatKhau(UsersDAO.getInstance().GetAccount().getId(), txtPassNew.getText())) {
-            JOptionPane.showMessageDialog(null, "Cập nhật thành công!!");
+            JOptionPane.showMessageDialog(null, Tags.UPDATE_SUCCESS);
         } else {
-            JOptionPane.showMessageDialog(null, "Lỗi!!");
+            JOptionPane.showMessageDialog(null, Tags.UNEXPECTED_ERROR);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
