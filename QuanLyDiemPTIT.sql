@@ -16,6 +16,5 @@ create table users(
     primary key (id)
 );
 
-alter table users add column age int;
 insert into users(`username`, `password`, `first_name`, `last_name`, `age`, `address`, `phone_number`, `email`, `note`, `role`) values
 ("admin", "admin", "Thanh", "Sơn", 23, "Hà Nội", "091234567", "pts.notexist@gmail.com", "", "admin");
