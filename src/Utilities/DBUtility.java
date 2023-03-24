@@ -23,12 +23,13 @@ public class DBUtility {
         Connection con = null;
         String url = "jdbc:mysql://localhost:3306/quanlydiem?useUnicode=true&characterEncoding=UTF-8";
         String user = "root";
-        String password = "280301";
+        String password = "admin";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url, user, password);
         } catch (Exception er) {
             er.printStackTrace();
+            System.out.println("Không kết nỗi được với db");
         }
         return con;
     }

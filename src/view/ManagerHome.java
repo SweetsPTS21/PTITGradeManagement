@@ -50,7 +50,6 @@ public class ManagerHome extends javax.swing.JFrame {
         jLabel1.setText("Quản Lý Chung");
 
         btnGrade.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnGrade.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/icons8-restaurant-menu-50.png"))); // NOI18N
         btnGrade.setText("Theo dõi điểm");
         btnGrade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,7 +58,6 @@ public class ManagerHome extends javax.swing.JFrame {
         });
 
         btnUser.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/icons8-table-50.png"))); // NOI18N
         btnUser.setText("Quản lý user");
         btnUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,7 +66,6 @@ public class ManagerHome extends javax.swing.JFrame {
         });
 
         btnConfig.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/icons8-money-bag-50.png"))); // NOI18N
         btnConfig.setText("Cấu hình");
         btnConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,7 +74,6 @@ public class ManagerHome extends javax.swing.JFrame {
         });
 
         btnExportReport.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnExportReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Icon/Buying_50px.png"))); // NOI18N
         btnExportReport.setText("Xuất báo cáo");
         btnExportReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
