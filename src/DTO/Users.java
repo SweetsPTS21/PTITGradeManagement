@@ -7,7 +7,7 @@ package DTO;
 
 /**
  *
- * @author TRI
+ * @author boixi
  */
 public class Users {
     private String id;
@@ -37,6 +37,16 @@ public class Users {
         this.email = email;
         this.note = note;
         this.role = role;
+    }
+    
+    public Users(String firstName, String lastName, int age, String address, String phoneNumber, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+
     }
 
     public String getId() {
@@ -126,7 +136,5 @@ public class Users {
     public void setRole(String role) {
         this.role = role;
     }
-
-    
 
 }
