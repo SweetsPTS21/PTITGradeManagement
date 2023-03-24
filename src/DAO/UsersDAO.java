@@ -180,7 +180,15 @@ public class UsersDAO {
                     ps.setInt(2, Integer.parseInt(id));
                     ps.executeUpdate();
                 }
-            }           
+            }
+            if(!khoa.equals("") && !role.equals("student")) {
+                if(checkExistUserKhoa(id)) {
+                    String sql = "DELETE FROM `users_khoa` WHERE `user_id` = ?";
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setInt(1, Integer.parseInt(id));                  
+                    ps.executeUpdate();
+                }
+            }
             if(i > 0) {
                 return true;
             }

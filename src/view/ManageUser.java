@@ -417,12 +417,22 @@ public class ManageUser extends javax.swing.JFrame {
   
         private void tblDisplayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDisplayMouseClicked
             // TODO add your handling code here:
-            //btnAdd.setEnabled(false);
+            //Initialize ComboBox
+            labelRole.setEnabled(true);
+            cboChucVu.setEnabled(true);
+            cboKhoa.setEnabled(true);
+            labelKhoa.setEnabled(true);
+                
             int row = tblDisplay.getSelectedRow();             
             idSave = listUser.get(row).getId();
             
             if(!UsersDAO.getInstance().GetAccount().getRole().equals("admin")) {
-                availbleForAdmin();
+                justForAdmin();
+            } else {
+                if(idSave.equals("1")) {
+                    labelRole.setEnabled(false);
+                    cboChucVu.setEnabled(false);
+                }
             }          
                        
             Khoa khoa = KhoaDAO.getInstance().getKhoaByUserId(Integer.parseInt(idSave));
@@ -439,9 +449,7 @@ public class ManageUser extends javax.swing.JFrame {
             txtRePass.setText("");
             
             System.out.println(khoa.getTen());
-            if(tblDisplay.getValueAt(row, 9).toString().equalsIgnoreCase("student")) {
-                cboKhoa.setEnabled(true);
-                labelKhoa.setEnabled(true);
+            if(tblDisplay.getValueAt(row, 9).toString().equalsIgnoreCase("student")) {               
                 cboKhoa.setSelectedItem(khoa.getTen() + "");
             }
             else {
@@ -605,7 +613,7 @@ public class ManageUser extends javax.swing.JFrame {
         return false;
     }
     
-    public void availbleForAdmin() {
+    public void justForAdmin() {
         if(idSave.equals("1")) {
             btnAdd.setEnabled(false);
             btnUpdate.setEnabled(false);
