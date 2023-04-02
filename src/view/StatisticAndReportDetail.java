@@ -4,6 +4,7 @@
  */
 package view;
 
+import Utilities.ExportToExcel;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,11 +20,16 @@ public class StatisticAndReportDetail extends javax.swing.JFrame {
      * @param dtm
      * @param data
      */
+    private String tableLabel = "";
+    private DefaultTableModel dtm = null;
+    
     public StatisticAndReportDetail(String label, DefaultTableModel dtm) {
         initComponents();
         setLocationRelativeTo(this);
         jLabel1.setText(label);
         jTable1.setModel(dtm);
+        this.dtm = dtm;
+        this.tableLabel = label;
     }
     
     public StatisticAndReportDetail() {
@@ -67,6 +73,11 @@ public class StatisticAndReportDetail extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Xuất báo cáo");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -130,6 +141,12 @@ public class StatisticAndReportDetail extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String filePath = "data.xlsx"; // Đường dẫn file xuất ra
+        ExportToExcel.export(this.tableLabel, this.dtm, filePath);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
