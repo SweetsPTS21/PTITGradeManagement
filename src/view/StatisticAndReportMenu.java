@@ -5,6 +5,7 @@
 package view;
 
 import DAO.KhoaDAO;
+import DAO.ScoreDAO;
 import DAO.StudentDAO;
 import DTO.Khoa;
 import DTO.Users;
@@ -159,6 +160,11 @@ public class StatisticAndReportMenu extends javax.swing.JFrame {
         jLabel6.setText("Mã lớp học phần");
 
         btnDiemLHP.setText("Tìm kiếm");
+        btnDiemLHP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDiemLHPActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -266,6 +272,25 @@ public class StatisticAndReportMenu extends javax.swing.JFrame {
         StatisticAndReportDetail sd = new StatisticAndReportDetail(label, dtm);
         sd.setVisible(true);
     }//GEN-LAST:event_btnDssvLHPActionPerformed
+
+    private void btnDiemLHPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiemLHPActionPerformed
+        // TODO add your handling code here:
+        String key = txtDiemLHP.getText().toUpperCase();
+        String label = "Danh sách điểm của sinh viên lớp "+key;
+        String[] titles = {
+            "STT","Họ","Tên","Điểm CC","Điểm KT","Điểm TH","Điểm BT","Điểm THI","% CC","% KT","% TH","% BT","% THI"
+        };
+        DefaultTableModel dtm = new DefaultTableModel();
+        dtm.setColumnIdentifiers(titles);
+
+        ArrayList<Object> data = ScoreDAO.getInstance().getDiemByLHP(key);
+        for(Object d:data){
+            dtm.addRow((Object[]) d);
+        }
+
+        StatisticAndReportDetail sd = new StatisticAndReportDetail(label, dtm);
+        sd.setVisible(true);
+    }//GEN-LAST:event_btnDiemLHPActionPerformed
 
     /**
      * @param args the command line arguments
