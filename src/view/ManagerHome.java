@@ -9,6 +9,7 @@ import DAO.UsersDAO;
 import DTO.Users;
 import Utilities.Tags;
 import javax.swing.JOptionPane;
+import view.ManageConfiguration.MainManage;
 
 /**
  *
@@ -173,6 +174,12 @@ public class ManagerHome extends javax.swing.JFrame {
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
         // TODO add your handling code here:
+//        if(!user.getRole().equals("admin") && !user.getRole().equals("manager")) {
+//            JOptionPane.showMessageDialog(null, Tags.CANNOT_ACCESS);
+//            return;
+//        }
+        MainManage frame = new MainManage();
+        frame.setVisible(true);
         //        dispose();
     }//GEN-LAST:event_btnConfigActionPerformed
 

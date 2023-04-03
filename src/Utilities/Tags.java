@@ -36,6 +36,11 @@ public class Tags {
     
     /*Login time */
     public static String LOGIN_TIME = "";
+    
+    
+    
+    public static String SUBJECT_ID_NOT_FOUND = "Không tìm thấy môn học trong hệ thống";
+    public static String UPDATE_SUBJECT_PERCENT_SUCCESS = "Cập nhật đầu điểm thành công";
 
     public static String getLOGIN_TIME() {
         return LOGIN_TIME;
