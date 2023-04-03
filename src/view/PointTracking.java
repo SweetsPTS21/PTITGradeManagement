@@ -1,4 +1,3 @@
-
 package view;
 
 import DAO.PointTrackingDAO;
@@ -8,10 +7,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Admin
- */
 public class PointTracking extends javax.swing.JFrame {
     
     DefaultTableModel tableModel;
@@ -31,8 +26,15 @@ public class PointTracking extends javax.swing.JFrame {
         
        String mạjors[]={"CNTT","ATTT"};    
        jComboBox3.setModel(new DefaultComboBoxModel<>(mạjors));
-        
-       String subjects[]={"Kiểm thử","Môn học 2","Môn học 3","Môn học 4","Môn học 5"};    
+       
+       List<String>  listSubject = PointTrackingDAO.getInstance().getSubjects();
+       String [] subjects = new String[listSubject.size()];
+       for(int i = 0; i < listSubject.size(); i++) subjects[i] = listSubject.get(i);
+       
+       
+       
+       
+        System.out.println(subjects);
        jComboBox5.setModel(new DefaultComboBoxModel<>(subjects));
         
         tableModel = new DefaultTableModel();
@@ -65,8 +67,7 @@ public class PointTracking extends javax.swing.JFrame {
                 subject = jComboBox5.getSelectedItem().toString(),
                 className = jComboBox2.getSelectedItem().toString(), 
                 semester = jComboBox4.getSelectedItem().toString();          
-        
-//        List<PointBoardItem> list = PointTrackingDAO.getInstance().getListPointBoard();       
+             
         List<PointBoardItem> list = PointTrackingDAO.getInstance().getListPointBoard(schoolYear, subject, major, className, semester);
         
         

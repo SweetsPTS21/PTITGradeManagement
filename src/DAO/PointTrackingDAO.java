@@ -27,6 +27,24 @@ public class PointTrackingDAO {
         return instance;
     }
     
+    public List<String> getSubjects() {
+        
+        List<String> listSubject = new ArrayList<>();
+        try {
+            Connection con = DBUtility.openConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM quanlydiem.subjects");
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                listSubject.add(rs.getString("subject_name"));
+            }
+        }catch(SQLException e) {
+            System.out.println(e);
+        }
+        
+        return listSubject;
+       
+    }
+    
     public List<PointBoardItem> getListPointBoard() {
         List<PointBoardItem> listPointBoard = new ArrayList<>();
         Connection con = DBUtility.openConnection();
