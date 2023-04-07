@@ -173,6 +173,8 @@ public class ManagerHome extends javax.swing.JFrame {
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
         // TODO add your handling code here:
+        MainManage frame = new MainManage();
+        frame.setVisible(true);
         //        dispose();
     }//GEN-LAST:event_btnConfigActionPerformed
 
@@ -188,6 +190,8 @@ public class ManagerHome extends javax.swing.JFrame {
 
     private void btnGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGradeActionPerformed
         // TODO add your handling code here:
+        PointTracking ptn = new PointTracking();
+        ptn.setVisible(true);
         
 //        dispose();
     }//GEN-LAST:event_btnGradeActionPerformed
@@ -244,6 +248,8 @@ public class ManagerHome extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ManagerHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

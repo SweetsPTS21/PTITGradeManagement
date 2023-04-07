@@ -29,6 +29,7 @@ public class DBUtility {
             con = DriverManager.getConnection(url, user, password);
         } catch (Exception er) {
             er.printStackTrace();
+            System.out.println("Không kết nỗi được với db");
         }
         return con;
     }

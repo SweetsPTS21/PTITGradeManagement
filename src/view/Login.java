@@ -47,6 +47,12 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hệ thống quản lý điểm PTIT");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         jLabel1.setText("ĐĂNG NHẬP");
@@ -156,7 +162,7 @@ public class Login extends javax.swing.JFrame {
             txtmessage.setText(Tags.NOT_EMPTY);
             return;
         }
-        if(validation(txtUsername.getText())) {
+        if(validation(txtUsername.getText(), txtPassword.getText())) {
             int status = UsersDAO.getInstance().Login(txtUsername.getText(), txtPassword.getText());
             if (status == 0) {
                 txtmessage.setText(Tags.LOGIN_FAIL);
@@ -199,6 +205,10 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtPasswordKeyPressed
 
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -226,6 +236,8 @@ public class Login extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -235,23 +247,28 @@ public class Login extends javax.swing.JFrame {
         });
     }
     
-    public boolean validation(String username) {
+    public boolean validation(String username, String password) {
         String regex = "^[A-Za-z0-9]\\w{5,29}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(username);
         txtmessage.setText("");
         
-        if(username.equals("admin")) {
-            return true;
-        }
         if(username.length() < 6 || username.length() > 30) {
             JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_USERNAME_1);
+            txtUsername.requestFocus();
             return false;
         }
         if(!matcher.matches()) {
             JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_USERNAME_2);
+            txtUsername.requestFocus();
             return false;
         }
+        if(password.length() < 6 || password.length() > 18) {
+            JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_PASSWORD);
+            txtPassword.requestFocus();
+            return false;
+        }
+                
         return true;
     }
 

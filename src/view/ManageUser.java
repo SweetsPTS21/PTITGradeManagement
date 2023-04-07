@@ -13,6 +13,7 @@ import Utilities.Tags;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -90,9 +91,11 @@ public class ManageUser extends javax.swing.JFrame {
         txtNote = new javax.swing.JTextField();
         labelKhoa = new javax.swing.JLabel();
         cboKhoa = new javax.swing.JComboBox<>();
+        showPass = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thêm tài khoản");
+        setResizable(false);
 
         txtFirstName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -114,6 +117,7 @@ public class ManageUser extends javax.swing.JFrame {
         jLabel5.setText("Xác nhận mật khẩu:");
 
         txtUsername.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtUsername.setToolTipText("Từ 6-30 ký tự không bao gồm ký tự đặc biệt");
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Edit File_50px.png"))); // NOI18N
         btnUpdate.setText("Cập nhật");
@@ -142,6 +146,7 @@ public class ManageUser extends javax.swing.JFrame {
         });
 
         txtPass.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPass.setToolTipText("Từ 6 - 18 ký tự");
 
         tblDisplay.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -192,16 +197,18 @@ public class ManageUser extends javax.swing.JFrame {
         });
 
         txtAge.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtAge.setToolTipText("16-99");
+        txtAge.setToolTipText("18-99");
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         txtPhoneNumber.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPhoneNumber.setToolTipText("10 chữ số");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel10.setText("Email:");
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEmail.setToolTipText("ex: test@gmail.com");
         txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtEmailActionPerformed(evt);
@@ -222,6 +229,13 @@ public class ManageUser extends javax.swing.JFrame {
         labelKhoa.setText("Khoa: ");
 
         cboKhoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Select khoa--", "CNTT", "ATTT", "QTKD", "DTVT" }));
+
+        showPass.setText("Show");
+        showPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showPassActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -248,14 +262,17 @@ public class ManageUser extends javax.swing.JFrame {
                                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtRePass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                        .addComponent(txtPass, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtFirstName, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(104, 104, 104)
+                                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(txtRePass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                            .addComponent(txtPass, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtFirstName, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(showPass)))
+                                .addGap(39, 39, 39)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,7 +296,7 @@ public class ManageUser extends javax.swing.JFrame {
                                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(126, 126, 126)
                                 .addComponent(btnDelete)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -313,7 +330,8 @@ public class ManageUser extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
-                                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(showPass))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel5)
@@ -399,8 +417,10 @@ public class ManageUser extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         if (!idSave.equals("-1")) {
+            ImageIcon icon = new ImageIcon(ManageUser.class.getResource("/icon/ic_delete.png"));
             int confirm = JOptionPane.showConfirmDialog(this, Tags.DELETE_CONFIRM, 
-                    "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+                    
             if(confirm == JOptionPane.YES_OPTION) {
                 if (UsersDAO.getInstance().Delete(String.valueOf(idSave))) {
                     LoadTable();
@@ -480,6 +500,15 @@ public class ManageUser extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cboChucVuActionPerformed
 
+    private void showPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPassActionPerformed
+        // TODO add your handling code here:
+        if(showPass.isSelected()) {
+            txtPass.setEchoChar((char) 0);
+        } else {
+            txtPass.setEchoChar('\u2022');
+        }
+    }//GEN-LAST:event_showPassActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -509,6 +538,10 @@ public class ManageUser extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
@@ -525,7 +558,7 @@ public class ManageUser extends javax.swing.JFrame {
             return false;
         }
         if (!txtPass.getText().equals(txtRePass.getText())) {
-            JOptionPane.showMessageDialog(null, "Xác nhận mật khẩu chưa chính xác!");
+            JOptionPane.showMessageDialog(null, Tags.CONFIRM_PASSWORD_INCORRECT);
             txtRePass.requestFocus();
             return false;
         }
@@ -535,10 +568,29 @@ public class ManageUser extends javax.swing.JFrame {
         } else {
             String phone = txtPhoneNumber.getText();
             if (!phone.matches("[0-9]{10}")) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại bao gồm 10 chữ số!");
+                JOptionPane.showMessageDialog(null, Tags.INVALID_PHONE_NUMBER);
                 txtAge.requestFocus();
                 return false;
             }
+        }
+        //Kiểm tra username/pasword
+        String regex = "^[A-Za-z0-9]\\w{5,29}$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(txtUsername.getText());
+        if(txtUsername.getText().length() < 6 || txtUsername.getText().length() > 30) {
+            JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_USERNAME_1);
+            txtUsername.requestFocus();
+            return false;
+        }
+        if(!m.matches()) {
+            JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_USERNAME_2);
+            txtUsername.requestFocus();
+            return false;
+        }
+        if(txtPass.getText().length() < 6 || txtPass.getText().length() > 18) {
+            JOptionPane.showMessageDialog(null, Tags.WRONG_FORMAT_PASSWORD);
+            txtPass.requestFocus();
+            return false;
         }
         //Kiểm tra tuổi
         if (numberValidate(txtAge)) {
@@ -546,7 +598,7 @@ public class ManageUser extends javax.swing.JFrame {
         } else {
             int age = Integer.parseInt(txtAge.getText());
             if (age < 18 || age > 100) {
-                JOptionPane.showMessageDialog(null, "Tuổi không hợp lệ!\n Người dùng phải từ 18 tuổi trở lên");
+                JOptionPane.showMessageDialog(null, Tags.INVALID_AGE);
                 txtAge.requestFocus();
                 return false;
             }
@@ -556,7 +608,7 @@ public class ManageUser extends javax.swing.JFrame {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(txtEmail.getText() + "");
         if (!matcher.matches()) {
-            JOptionPane.showMessageDialog(null, "Email không đúng định dạng!\nexample: test@email.com");
+            JOptionPane.showMessageDialog(null, Tags.INVALID_EMAIL);
             txtEmail.requestFocus();
             return false;
         }
@@ -565,7 +617,7 @@ public class ManageUser extends javax.swing.JFrame {
     
     public boolean numberValidate(JTextField jTextField) {
         if (!jTextField.getText().matches("[0-9]+")) {
-            JOptionPane.showMessageDialog(null, "Chỉ được điền số!");
+            JOptionPane.showMessageDialog(null, Tags.NUMBER_ONLY);
             jTextField.requestFocus();
             return true;
         }
@@ -574,7 +626,7 @@ public class ManageUser extends javax.swing.JFrame {
     
     public boolean emptyValidate(JTextField jTextField) {
         if (jTextField.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Không để trống!");
+            JOptionPane.showMessageDialog(null, Tags.NOT_EMPTY);
             jTextField.requestFocus();
             return true;
         }
@@ -663,6 +715,7 @@ public class ManageUser extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelKhoa;
     private javax.swing.JLabel labelRole;
+    private javax.swing.JCheckBox showPass;
     private javax.swing.JTable tblDisplay;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtAge;
